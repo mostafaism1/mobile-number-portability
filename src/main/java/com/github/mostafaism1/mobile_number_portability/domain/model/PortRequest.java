@@ -2,7 +2,7 @@ package com.github.mostafaism1.mobile_number_portability.domain.model;
 
 import java.time.Instant;
 
-public record PortRequest(long id, MobileNumber mobileNumber, Operator donor, Operator recipient,
+public record PortRequest(Long id, MobileNumber mobileNumber, Operator donor, Operator recipient,
     Instant createdAt, State state) {
 
   public PortRequest transition(State transitionState) {
