@@ -32,7 +32,7 @@ public class CreatePortRequestUseCase {
         .orElseThrow(() -> new InvalidOperatorException(command.donor()));
     final Operator recipient = operatorRepository.getOperatorByName(command.recipient())
         .orElseThrow(() -> new InvalidOperatorException(command.recipient()));
-    return new PortRequest(null, mobileNumber, donor, recipient, null, PortRequest.State.PENDING);
+    return new PortRequest(null, mobileNumber, donor, recipient, null, PortRequest.States.PENDING);
   }
 
   private void validateRequest(PortRequest portRequest) {

@@ -59,7 +59,7 @@ public class PortRequestEntity {
 
   public PortRequest toModel() {
     return new PortRequest(this.id, this.mobileNumber.toModel(), this.donor.toModel(),
-        this.recipient.toModel(), this.createdAt, PortRequest.State.valueOf(this.state.toString()));
+        this.recipient.toModel(), this.createdAt, PortRequest.States.valueOf(this.state.toString()));
   }
 
   public static PortRequestEntity fromModel(PortRequest portRequest) {

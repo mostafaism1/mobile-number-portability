@@ -50,11 +50,11 @@ public class UpdatePortRequestStateUseCaseTest {
   void givenIdOfAPendingRequestAndAcceptedState_thenShouldTransition() {
     // Given
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
-        PortRequest.State.PENDING);
+        PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
     updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "accepted");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
-        PortRequest.State.ACCEPTED);
+        PortRequest.States.ACCEPTED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))
         .willReturn(expectedResponse);
     ArgumentCaptor<PortRequest> portRequestCaptor = ArgumentCaptor.forClass(PortRequest.class);
@@ -67,18 +67,18 @@ public class UpdatePortRequestStateUseCaseTest {
     then(portRequestCaptor.getValue().mobileNumber()).isEqualTo(portRequest.mobileNumber());
     then(portRequestCaptor.getValue().donor()).isEqualTo(portRequest.donor());
     then(portRequestCaptor.getValue().recipient()).isEqualTo(portRequest.recipient());
-    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.State.ACCEPTED);
+    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.States.ACCEPTED);
   }
 
   @Test
   void givenIdOfAPendingRequestAndRejectedState_thenShouldTransition() {
     // Given
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
-        PortRequest.State.PENDING);
+        PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
     updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "rejected");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
-        PortRequest.State.REJECTED);
+        PortRequest.States.REJECTED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))
         .willReturn(expectedResponse);
     ArgumentCaptor<PortRequest> portRequestCaptor = ArgumentCaptor.forClass(PortRequest.class);
@@ -91,18 +91,18 @@ public class UpdatePortRequestStateUseCaseTest {
     then(portRequestCaptor.getValue().mobileNumber()).isEqualTo(portRequest.mobileNumber());
     then(portRequestCaptor.getValue().donor()).isEqualTo(portRequest.donor());
     then(portRequestCaptor.getValue().recipient()).isEqualTo(portRequest.recipient());
-    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.State.REJECTED);
+    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.States.REJECTED);
   }
 
   @Test
   void givenIdOfAPendingRequestAndCanceledState_thenShouldTransition() {
     // Given
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
-        PortRequest.State.PENDING);
+        PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
     updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "canceled");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
-        PortRequest.State.CANCELED);
+        PortRequest.States.CANCELED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))
         .willReturn(expectedResponse);
     ArgumentCaptor<PortRequest> portRequestCaptor = ArgumentCaptor.forClass(PortRequest.class);
@@ -115,7 +115,7 @@ public class UpdatePortRequestStateUseCaseTest {
     then(portRequestCaptor.getValue().mobileNumber()).isEqualTo(portRequest.mobileNumber());
     then(portRequestCaptor.getValue().donor()).isEqualTo(portRequest.donor());
     then(portRequestCaptor.getValue().recipient()).isEqualTo(portRequest.recipient());
-    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.State.CANCELED);
+    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.States.CANCELED);
   }
 
   // TODO: write test cases for unhappy paths.

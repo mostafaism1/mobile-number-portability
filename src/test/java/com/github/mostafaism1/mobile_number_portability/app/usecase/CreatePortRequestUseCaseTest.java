@@ -59,7 +59,7 @@ public class CreatePortRequestUseCaseTest {
     recipient = new Operator(1L, "orange");
     mobileNumber = new MobileNumber(0L, "01012345678", donor);
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
-        PortRequest.State.PENDING);
+        PortRequest.States.PENDING);
   }
 
   @Test
@@ -85,7 +85,7 @@ public class CreatePortRequestUseCaseTest {
     then(portRequestCaptor.getValue().donor().name()).isEqualTo(createPortRequestCommand.donor());
     then(portRequestCaptor.getValue().recipient().name())
         .isEqualTo(createPortRequestCommand.recipient());
-    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.State.PENDING);
+    then(portRequestCaptor.getValue().state()).isEqualTo(PortRequest.States.PENDING);
   }
 
   @Test
@@ -108,7 +108,7 @@ public class CreatePortRequestUseCaseTest {
     then(actual.number()).isEqualTo("01012345678");
     then(actual.donor()).isEqualTo("vodafone");
     then(actual.recipient()).isEqualTo("orange");
-    then(actual.state()).isEqualToIgnoringCase(PortRequest.State.PENDING.toString());
+    then(actual.state()).isEqualToIgnoringCase(PortRequest.States.PENDING.toString());
   }
 
   @Test
@@ -119,7 +119,7 @@ public class CreatePortRequestUseCaseTest {
     given(mobileNumberRepository.getMobileNumberByNumber("01012345678"))
         .willReturn(Optional.of(mobileNumber));
     List<PortRequest> existingPendingRequestsForNumber = List.of(new PortRequest(0L, mobileNumber,
-        donor, recipient, Instant.now().minus(1, ChronoUnit.MINUTES), PortRequest.State.PENDING));
+        donor, recipient, Instant.now().minus(1, ChronoUnit.MINUTES), PortRequest.States.PENDING));
     given(portRequestRepository.getPendingByNumber("01012345678"))
         .willReturn(existingPendingRequestsForNumber);
 

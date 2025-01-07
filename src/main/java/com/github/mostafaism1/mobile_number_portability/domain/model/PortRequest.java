@@ -3,53 +3,53 @@ package com.github.mostafaism1.mobile_number_portability.domain.model;
 import java.time.Instant;
 
 public record PortRequest(Long id, MobileNumber mobileNumber, Operator donor, Operator recipient,
-    Instant createdAt, State state) {
+    Instant createdAt, States state) {
 
-  public PortRequest transition(State transitionState) {
+  public PortRequest transition(States transitionState) {
     if (!state.canTransitionTo(transitionState))
       throw new IllegalRequestStateTransitionException(state, transitionState);
 
     return cloneWithState(transitionState);
   }
 
-  private PortRequest cloneWithState(State state) {
+  private PortRequest cloneWithState(States state) {
     return new PortRequest(this.id, this.mobileNumber, this.donor, this.recipient, this.createdAt,
         state);
   }
 
-  public static enum State {
+  public static enum States {
     PENDING {
       @Override
-      public boolean canTransitionTo(State transitionState) {
+      public boolean canTransitionTo(States transitionState) {
         return !transitionState.equals(this);
       }
     },
     CANCELED {
       @Override
-      public boolean canTransitionTo(State transitionState) {
+      public boolean canTransitionTo(States transitionState) {
         return false;
       }
     },
     REJECTED {
       @Override
-      public boolean canTransitionTo(State transitionState) {
+      public boolean canTransitionTo(States transitionState) {
         return false;
       }
     },
     ACCEPTED {
       @Override
-      public boolean canTransitionTo(State transitionState) {
+      public boolean canTransitionTo(States transitionState) {
         return false;
       }
     };
 
-    public abstract boolean canTransitionTo(State transitionState);
+    public abstract boolean canTransitionTo(States transitionState);
 
   }
 
   public static class IllegalRequestStateTransitionException extends RuntimeException {
 
-    private IllegalRequestStateTransitionException(State currentState, State transitionState) {
+    private IllegalRequestStateTransitionException(States currentState, States transitionState) {
       super(String.format("Cannot change request state from [%s] to [%s].", currentState,
           transitionState));
     }

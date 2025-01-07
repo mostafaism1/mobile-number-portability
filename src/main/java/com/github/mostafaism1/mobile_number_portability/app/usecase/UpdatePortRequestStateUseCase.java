@@ -14,9 +14,9 @@ public class UpdatePortRequestStateUseCase {
   public PortRequestDTO update(UpdatePortRequestStateCommand command) {
     final PortRequest portRequest = mapUpdateCommandToModel(command);
     final PortRequest updatedPortRequest =
-        portRequest.transition(PortRequest.State.valueOf(command.transitionState().toUpperCase()));
+        portRequest.transition(PortRequest.States.valueOf(command.transitionState().toUpperCase()));
     final PortRequest result = portRequestRepository.update(updatedPortRequest);
-    if (command.transitionState().equalsIgnoreCase(PortRequest.State.ACCEPTED.toString()))
+    if (command.transitionState().equalsIgnoreCase(PortRequest.States.ACCEPTED.toString()))
       cancelPendingRequestsForNumber(portRequest);
     return PortRequestDTO.fromModel(result);
   }
@@ -29,7 +29,7 @@ public class UpdatePortRequestStateUseCase {
 
   private void cancelPendingRequestsForNumber(final PortRequest portRequest) {
     portRequestRepository.getPendingByNumber(portRequest.mobileNumber().number()).stream()
-        .map(r -> r.transition(PortRequest.State.CANCELED))
+        .map(r -> r.transition(PortRequest.States.CANCELED))
         .forEach(r -> portRequestRepository.update(r));
   }
 
