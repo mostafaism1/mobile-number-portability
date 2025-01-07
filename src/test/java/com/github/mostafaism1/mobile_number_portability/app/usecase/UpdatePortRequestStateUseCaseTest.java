@@ -15,11 +15,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.app.request.UpdatePortRequestStateCommand;
 import com.github.mostafaism1.mobile_number_portability.domain.model.MobileNumber;
 import com.github.mostafaism1.mobile_number_portability.domain.model.Operator;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
-import com.github.mostafaism1.mobile_number_portability.repository.PortRequestRepository;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)

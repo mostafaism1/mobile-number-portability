@@ -1,9 +1,9 @@
 package com.github.mostafaism1.mobile_number_portability.app.usecase;
 
 import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
+import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.app.request.UpdatePortRequestStateCommand;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
-import com.github.mostafaism1.mobile_number_portability.repository.PortRequestRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
