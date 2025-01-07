@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.github.mostafaism1</groupId>
+	<artifactId>mobile-number-portability</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>mobile-number-portability</name>
+	<description>Implements a Mobile Number Portability (MNP) service. Ref: https://www.tra.gov.eg/wp-content/uploads/2020/11/Number-Portability-User-Guide-Summary.pdf</description>
+	
+	<properties>
+		<java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
+	<dependencies>
+		<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>5.11.4</version>
+				<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
