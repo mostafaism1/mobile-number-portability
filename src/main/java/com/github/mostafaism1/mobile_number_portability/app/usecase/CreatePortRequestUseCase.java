@@ -1,8 +1,9 @@
 package com.github.mostafaism1.mobile_number_portability.app.usecase;
 
 import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
-import com.github.mostafaism1.mobile_number_portability.app.mapper.PortRequestMapper;
 import com.github.mostafaism1.mobile_number_portability.app.request.CreatePortRequestCommand;
+import com.github.mostafaism1.mobile_number_portability.domain.model.MobileNumber;
+import com.github.mostafaism1.mobile_number_portability.domain.model.Operator;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
 import com.github.mostafaism1.mobile_number_portability.repository.MobileNumberRepository;
 import com.github.mostafaism1.mobile_number_portability.repository.OperatorRepository;
@@ -17,12 +18,21 @@ public class CreatePortRequestUseCase {
   private final PortRequestRepository portRequestRepository;
 
   public PortRequestDTO create(CreatePortRequestCommand command) {
-    final PortRequestMapper portRequestMapper =
-        new PortRequestMapper(operatorRepository, mobileNumberRepository);
-    final PortRequest portRequest = portRequestMapper.mapCreateCommandToModel(command);
+    final PortRequest portRequest = mapCreateCommandToModel(command);
     validateRequest(portRequest);
     final PortRequest result = portRequestRepository.create(portRequest);
-    return portRequestMapper.mapModelToDto(result);
+    return PortRequestDTO.fromModel(result);
+  }
+
+  private PortRequest mapCreateCommandToModel(CreatePortRequestCommand command) {
+    final MobileNumber mobileNumber =
+        mobileNumberRepository.getMobileNumberByNumber(command.number())
+            .orElseThrow(() -> new InvalidMobileNumberException(command.number()));
+    final Operator donor = operatorRepository.getOperatorByName(command.donor())
+        .orElseThrow(() -> new InvalidOperatorException(command.donor()));
+    final Operator recipient = operatorRepository.getOperatorByName(command.recipient())
+        .orElseThrow(() -> new InvalidOperatorException(command.recipient()));
+    return new PortRequest(null, mobileNumber, donor, recipient, null, PortRequest.State.PENDING);
   }
 
   private void validateRequest(PortRequest portRequest) {
@@ -41,6 +51,18 @@ public class CreatePortRequestUseCase {
 
   private boolean recipientIsDonor(PortRequest portRequest) {
     return portRequest.recipient().equals(portRequest.donor());
+  }
+
+  static class InvalidMobileNumberException extends RuntimeException {
+    private InvalidMobileNumberException(String number) {
+      super(String.format("[%s] is not a valid mobile number.", number));
+    }
+  }
+
+  static class InvalidOperatorException extends RuntimeException {
+    private InvalidOperatorException(String operatorName) {
+      super(String.format("[%s] is not a valid operator.", operatorName));
+    }
   }
 
   static class IllegalRecipientException extends RuntimeException {
