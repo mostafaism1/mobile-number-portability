@@ -6,10 +6,10 @@ public record PortRequest(Long id, MobileNumber mobileNumber, Operator donor, Op
     Instant createdAt, State state) {
 
   public PortRequest transition(State transitionState) {
-    if (state.canTransitionTo(transitionState))
+    if (!state.canTransitionTo(transitionState))
       throw new IllegalRequestStateTransitionException(state, transitionState);
 
-    return cloneWithState(state);
+    return cloneWithState(transitionState);
   }
 
   private PortRequest cloneWithState(State state) {
@@ -47,7 +47,7 @@ public record PortRequest(Long id, MobileNumber mobileNumber, Operator donor, Op
 
   }
 
-  private static class IllegalRequestStateTransitionException extends RuntimeException {
+  public static class IllegalRequestStateTransitionException extends RuntimeException {
 
     private IllegalRequestStateTransitionException(State currentState, State transitionState) {
       super(String.format("Cannot change request state from [%s] to [%s].", currentState,
