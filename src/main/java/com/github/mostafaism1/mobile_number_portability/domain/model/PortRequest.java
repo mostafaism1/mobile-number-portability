@@ -47,9 +47,9 @@ public record PortRequest(Long id, MobileNumber mobileNumber, Operator donor, Op
 
   }
 
-  public static class IllegalRequestStateTransitionException extends RuntimeException {
+  private static class IllegalRequestStateTransitionException extends RuntimeException {
 
-    public IllegalRequestStateTransitionException(State currentState, State transitionState) {
+    private IllegalRequestStateTransitionException(State currentState, State transitionState) {
       super(String.format("Cannot change request state from [%s] to [%s].", currentState,
           transitionState));
     }
