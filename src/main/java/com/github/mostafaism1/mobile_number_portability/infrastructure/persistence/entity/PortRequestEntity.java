@@ -46,9 +46,9 @@ public class PortRequestEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "state")
   @NotNull
-  private PortRequestEntityState state;
+  private States state;
 
-  public static enum PortRequestEntityState {
+  public static enum States {
     PENDING, CANCELED, REJECTED, ACCEPTED;
   }
 
@@ -67,7 +67,7 @@ public class PortRequestEntity {
         MobileNumberEntity.fromModel(portRequest.mobileNumber()),
         OperatorEntity.fromModel(portRequest.donor()),
         OperatorEntity.fromModel(portRequest.recipient()), portRequest.createdAt(),
-        PortRequestEntityState.valueOf(portRequest.state().toString()));
+        States.valueOf(portRequest.state().toString()));
   }
 
 }
