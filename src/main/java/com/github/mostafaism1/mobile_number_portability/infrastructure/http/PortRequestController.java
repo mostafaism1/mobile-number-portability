@@ -25,20 +25,25 @@ public class PortRequestController {
   private final ListPortRequestsUseCase listPortRequestsUseCase;
   private final UpdatePortRequestStateUseCase updatePortRequestStatusUseCase;
 
-  @PostMapping("/")
+  @PostMapping
   public PortRequestDTO createPortRequest(
       @RequestBody CreatePortRequestCommand createPortRequestCommand) {
     return createPortRequestUseCase.create(createPortRequestCommand);
   }
 
-  @PatchMapping("/{id}")
-  public PortRequestDTO updatePortRequest(@RequestBody String state, @PathVariable("id") Long id) {
-    return updatePortRequestStatusUseCase.update(new UpdatePortRequestStateCommand(id, state));
-  }
-
-  @GetMapping("/")
+  @GetMapping
   public List<PortRequestDTO> getPortRequests() {
     return listPortRequestsUseCase.list();
+  }
+
+  @PatchMapping("/{id}")
+  public PortRequestDTO updatePortRequest(@RequestBody UpdateRequestBody updateRequestBody,
+      @PathVariable("id") Long id) {
+    return updatePortRequestStatusUseCase
+        .update(new UpdatePortRequestStateCommand(id, updateRequestBody.state));
+  }
+
+  private static record UpdateRequestBody(String state) {
   }
 
 
