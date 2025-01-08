@@ -1,11 +1,13 @@
 package com.github.mostafaism1.mobile_number_portability.infrastructure.persistence.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
+import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest.States;
 import com.github.mostafaism1.mobile_number_portability.infrastructure.persistence.entity.PortRequestEntity;
 import lombok.AllArgsConstructor;
 
@@ -55,6 +57,12 @@ public class JpaPortRequestRepository implements PortRequestRepository {
     final PortRequestEntity.States newEntityState = PortRequestEntity.States.fromModel(newState);
     springDataPortRequestRepository.batchUpdateStateByMobileNumber(matchingEntityState,
         newEntityState, number);
+  }
+
+  @Override
+  public void batchUpdateStateByCreatedAtBefore(States newState, Instant instant) {
+    final PortRequestEntity.States newEntityState = PortRequestEntity.States.fromModel(newState);
+    springDataPortRequestRepository.batchUpdateStateByCreatedAtBefore(newEntityState, instant);
   }
 
 }

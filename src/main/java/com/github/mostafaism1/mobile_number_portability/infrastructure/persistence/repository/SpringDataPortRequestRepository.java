@@ -1,5 +1,6 @@
 package com.github.mostafaism1.mobile_number_portability.infrastructure.persistence.repository;
 
+import java.time.Instant;
 import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,9 +16,13 @@ public interface SpringDataPortRequestRepository extends CrudRepository<PortRequ
   List<PortRequestEntity> getByMobileNumberNumberAndState(String number, States state);
 
   @Modifying
-  @Query(value = "UPDATE PortRequestEntity SET state = :newState WHERE state = :matchingState",
-      nativeQuery = true)
-  public void batchUpdateStateByMobileNumber(@Param("matchingState") States matchingState,
+  @Query(value = "UPDATE PortRequestEntity SET state = :newState WHERE state = :matchingState")
+  void batchUpdateStateByMobileNumber(@Param("matchingState") States matchingState,
       @Param("newState") States newState, String number);
+
+
+  @Modifying
+  @Query(value = "UPDATE PortRequestEntity SET state = :newState WHERE createdAt < :instant")
+  void batchUpdateStateByCreatedAtBefore(@Param("newState") States newState, Instant instant);
 
 }
