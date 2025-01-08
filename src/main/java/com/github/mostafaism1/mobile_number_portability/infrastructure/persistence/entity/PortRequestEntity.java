@@ -45,7 +45,7 @@ public class PortRequestEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "state")
-  @NotNull
+  @NotNull(message = "port_request.state is required.")
   private States state;
 
   public static enum States {

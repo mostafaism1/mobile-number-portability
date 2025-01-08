@@ -22,7 +22,7 @@ public class OperatorEntity {
   private Long id;
 
   @Column(name = "name")
-  @NotBlank
+  @NotBlank(message = "operator.name is required.")
   private String name;
 
   public Operator toModel() {
