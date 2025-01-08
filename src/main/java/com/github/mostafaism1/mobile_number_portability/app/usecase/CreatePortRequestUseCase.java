@@ -18,9 +18,9 @@ public class CreatePortRequestUseCase {
   private final PortRequestRepository portRequestRepository;
 
   public PortRequestDTO create(CreatePortRequestCommand command) {
-    validateAuthroized(command);
     final PortRequest portRequest = mapCreateCommandToModel(command);
     validateRequest(portRequest);
+    validateAuthroized(command);
     final PortRequest result = portRequestRepository.create(portRequest);
     return PortRequestDTO.fromModel(result);
   }
