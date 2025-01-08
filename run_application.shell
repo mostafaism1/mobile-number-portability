@@ -3,12 +3,17 @@
 # Exit immediately if any command exits with a non-zero status
 set -e
 
-# Step 1: Build the application
+# Step 1: Build the application (only if no JAR file exists in ./target)
 echo "=============================="
-echo "Starting Maven build..."
+echo "Checking for existing JAR file in ./target..."
 echo "=============================="
-./mvnw clean package
-echo "Maven build completed successfully."
+if [ ! -f ./target/*.jar ]; then
+  echo "No JAR file found. Starting Maven build..."
+  ./mvnw clean package
+  echo "Maven build completed successfully."
+else
+  echo "JAR file already exists. Skipping Maven build."
+fi
 
 # Step 2: Build the Docker image
 echo "=============================="
