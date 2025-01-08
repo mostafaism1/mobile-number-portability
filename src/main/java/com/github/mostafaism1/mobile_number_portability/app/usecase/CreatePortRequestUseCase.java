@@ -40,13 +40,12 @@ public class CreatePortRequestUseCase {
       throw new IllegalRecipientException(portRequest.mobileNumber().number(),
           portRequest.recipient().name());
 
-    if (pendingRequestWithSameDetailsExist(portRequest))
-      throw new DuplicateRequestException();
+    if (existsPendingRequestForNumber(portRequest))
+      throw new DuplicateRequestException(portRequest.mobileNumber().number());
   }
 
-  private boolean pendingRequestWithSameDetailsExist(PortRequest portRequest) {
-    return portRequestRepository.getPendingByNumber(portRequest.mobileNumber().number()).stream()
-        .anyMatch(r -> r.recipient().equals(portRequest.recipient()));
+  private boolean existsPendingRequestForNumber(PortRequest portRequest) {
+    return !portRequestRepository.getPendingByNumber(portRequest.mobileNumber().number()).isEmpty();
   }
 
   private boolean recipientIsDonor(PortRequest portRequest) {
@@ -74,8 +73,9 @@ public class CreatePortRequestUseCase {
 
   static class DuplicateRequestException extends RuntimeException {
 
-    private DuplicateRequestException() {
-      super("Request already created.");
+    private DuplicateRequestException(String number) {
+      super(String.format(
+          "Cannot create request for number [%s] because it has another pending request.", number));
     }
   }
 

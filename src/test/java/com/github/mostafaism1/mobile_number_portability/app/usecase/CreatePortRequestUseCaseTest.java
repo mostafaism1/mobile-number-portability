@@ -4,7 +4,6 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.mockito.BDDMockito.given;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -112,14 +111,32 @@ public class CreatePortRequestUseCaseTest {
   }
 
   @Test
-  void givenAnExistingRequest_thenShouldFail() {
+  void givenAPendingRequestAlreadyCreatedAndSameRecipientSendsACreateRequestAgain_thenFail() {
     // Given.
     given(operatorRepository.getOperatorByName("vodafone")).willReturn(Optional.of(donor));
     given(operatorRepository.getOperatorByName("orange")).willReturn(Optional.of(recipient));
     given(mobileNumberRepository.getMobileNumberByNumber("01012345678"))
         .willReturn(Optional.of(mobileNumber));
     List<PortRequest> existingPendingRequestsForNumber = List.of(new PortRequest(0L, mobileNumber,
-        donor, recipient, Instant.now().minus(1, ChronoUnit.MINUTES), PortRequest.States.PENDING));
+        donor, recipient, Instant.now(), PortRequest.States.PENDING));
+    given(portRequestRepository.getPendingByNumber("01012345678"))
+        .willReturn(existingPendingRequestsForNumber);
+
+    // When, then.
+    thenThrownBy(() -> createPortRequestUseCase.create(createPortRequestCommand))
+        .isInstanceOf(DuplicateRequestException.class);
+  }
+
+  @Test
+  void givenAPendingRequestAlreadyCreatedAndADifferentRecipientSendsACreateRequest_thenFail() {
+    // Given.
+    given(operatorRepository.getOperatorByName("vodafone")).willReturn(Optional.of(donor));
+    given(operatorRepository.getOperatorByName("orange")).willReturn(Optional.of(recipient));
+    given(mobileNumberRepository.getMobileNumberByNumber("01012345678"))
+        .willReturn(Optional.of(mobileNumber));
+    Operator secondRecipient = new Operator(2L, "etisalat");
+    List<PortRequest> existingPendingRequestsForNumber = List.of(new PortRequest(0L, mobileNumber,
+        donor, secondRecipient, Instant.now(), PortRequest.States.PENDING));
     given(portRequestRepository.getPendingByNumber("01012345678"))
         .willReturn(existingPendingRequestsForNumber);
 
