@@ -1,6 +1,7 @@
 package com.github.mostafaism1.mobile_number_portability.infrastructure.http;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
 import com.github.mostafaism1.mobile_number_portability.app.request.CreatePortRequestCommand;
@@ -29,6 +31,7 @@ public class PortRequestController {
   private final UpdatePortRequestStateUseCase updatePortRequestStatusUseCase;
 
   @PostMapping
+  @ResponseStatus(code = HttpStatus.OK)
   public PortRequestDTO createPortRequest(@RequestBody CreatePortRequestBody createPortRequestBody,
       @RequestHeader(AUTH_HEADER) String organization) {
     final CreatePortRequestCommand command =
@@ -38,11 +41,13 @@ public class PortRequestController {
   }
 
   @GetMapping
+  @ResponseStatus(code = HttpStatus.OK)
   public List<PortRequestDTO> getPortRequests() {
     return listPortRequestsUseCase.list();
   }
 
   @PatchMapping("/{id}")
+  @ResponseStatus(code = HttpStatus.OK)
   public PortRequestDTO updatePortRequest(@RequestBody UpdateRequestBody updateRequestBody,
       @RequestHeader(AUTH_HEADER) String organization, @PathVariable("id") Long id) {
     final UpdatePortRequestStateCommand command =
