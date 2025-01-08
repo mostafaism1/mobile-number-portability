@@ -40,13 +40,13 @@ public class UpdatePortRequestStateUseCase {
     portRequestRepository.batchUpdateStateByMobileNumber(States.PENDING, States.CANCELED, number);
   }
 
-  static class InvalidRequestIdException extends RuntimeException {
+  public static class InvalidRequestIdException extends RuntimeException {
     private InvalidRequestIdException(Long id) {
       super(String.format("[%d] is not a valid Port Request ID.", id));
     }
   }
 
-  static class UnAuthorizedUpdateRequestException extends RuntimeException {
+  public static class UnAuthorizedUpdateRequestException extends RuntimeException {
     private UnAuthorizedUpdateRequestException(String requestedBy, String recipient) {
       super(String.format("[%s] cannot update a port request on behalf of [%s].", requestedBy,
           recipient));

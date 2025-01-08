@@ -59,37 +59,37 @@ public class CreatePortRequestUseCase {
     return portRequest.recipient().equals(portRequest.donor());
   }
 
-  static class InvalidMobileNumberException extends RuntimeException {
+  public static class InvalidMobileNumberException extends RuntimeException {
     private InvalidMobileNumberException(String number) {
       super(String.format("[%s] is not a valid mobile number.", number));
     }
   }
 
-  static class InvalidOperatorException extends RuntimeException {
+  public static class UnAuthorizedCreateRequestException extends RuntimeException {
+    private UnAuthorizedCreateRequestException(String requestedBy, String recipient) {
+      super(String.format("[%s] cannot create a port request on behalf of [%s].", requestedBy,
+          recipient));
+    }
+  }
+
+  public static class InvalidOperatorException extends RuntimeException {
     private InvalidOperatorException(String operatorName) {
       super(String.format("[%s] is not a valid operator.", operatorName));
     }
   }
 
-  static class IllegalRecipientException extends RuntimeException {
+  public static class IllegalRecipientException extends RuntimeException {
 
     private IllegalRecipientException(String number, String operator) {
       super(String.format("Mobile number [%s] is already assigned to [%s]", number, operator));
     }
   }
 
-  static class PortRequestConflictException extends RuntimeException {
+  public static class PortRequestConflictException extends RuntimeException {
 
     private PortRequestConflictException(String number) {
       super(String.format(
           "Cannot create request for number [%s] because it has another pending request.", number));
-    }
-  }
-
-  static class UnAuthorizedCreateRequestException extends RuntimeException {
-    private UnAuthorizedCreateRequestException(String requestedBy, String recipient) {
-      super(String.format("[%s] cannot create a port request on behalf of [%s].", requestedBy,
-          recipient));
     }
   }
 
