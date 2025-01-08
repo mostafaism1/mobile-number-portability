@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Exit immediately if any command exits with a non-zero status
+set -e
+
+# Step 1: Build the application
+echo "=============================="
+echo "Starting Maven build..."
+echo "=============================="
+./mvnw clean package
+echo "Maven build completed successfully."
+
+# Step 2: Build the Docker image
+echo "=============================="
+echo "Building Docker image..."
+echo "=============================="
+docker build -t mnp:0.0.1-SNAPSHOT .
+echo "Docker image built successfully."
+
+# Step 3: Start the application with Docker Compose
+echo "=============================="
+echo "Starting application with Docker Compose..."
+echo "=============================="
+docker-compose up
+echo "Application started successfully."
