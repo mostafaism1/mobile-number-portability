@@ -23,7 +23,7 @@ import com.github.mostafaism1.mobile_number_portability.app.repository.MobileNum
 import com.github.mostafaism1.mobile_number_portability.app.repository.OperatorRepository;
 import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.app.request.CreatePortRequestCommand;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.DuplicateRequestException;
+import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.PortRequestConflictException;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.IllegalRecipientException;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.InvalidMobileNumberException;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.InvalidOperatorException;
@@ -124,7 +124,7 @@ public class CreatePortRequestUseCaseTest {
 
     // When, then.
     thenThrownBy(() -> createPortRequestUseCase.create(createPortRequestCommand))
-        .isInstanceOf(DuplicateRequestException.class);
+        .isInstanceOf(PortRequestConflictException.class);
   }
 
   @Test
@@ -142,7 +142,7 @@ public class CreatePortRequestUseCaseTest {
 
     // When, then.
     thenThrownBy(() -> createPortRequestUseCase.create(createPortRequestCommand))
-        .isInstanceOf(DuplicateRequestException.class);
+        .isInstanceOf(PortRequestConflictException.class);
   }
 
   @Test
