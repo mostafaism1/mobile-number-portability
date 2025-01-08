@@ -13,8 +13,8 @@ public class UpdatePortRequestStateUseCase {
   private final PortRequestRepository portRequestRepository;
 
   public PortRequestDTO update(UpdatePortRequestStateCommand command) {
-    validateAuthorized(command);
     final PortRequest portRequest = mapUpdateCommandToModel(command);
+    validateAuthorized(command, portRequest);
     final PortRequest updatedPortRequest =
         portRequest.transition(PortRequest.States.valueOf(command.transitionState().toUpperCase()));
     final PortRequest result = portRequestRepository.update(updatedPortRequest);
@@ -23,11 +23,11 @@ public class UpdatePortRequestStateUseCase {
     return PortRequestDTO.fromModel(result);
   }
 
-  private void validateAuthorized(UpdatePortRequestStateCommand command) {
-    final String recipient = portRequestRepository.getById(command.id()).get().recipient().name();
-    final boolean isAuthorized = command.requestedBy().equalsIgnoreCase(recipient);
+  private void validateAuthorized(UpdatePortRequestStateCommand command, PortRequest portRequest) {
+    final boolean isAuthorized = command.requestedBy().equalsIgnoreCase(portRequest.donor().name());
     if (!isAuthorized)
-      throw new UnAuthorizedUpdateRequestException(command.requestedBy(), recipient);
+      throw new UnAuthorizedUpdateRequestException(command.requestedBy(),
+          portRequest.donor().name(), portRequest.id());
   }
 
   private PortRequest mapUpdateCommandToModel(UpdatePortRequestStateCommand command) {
@@ -47,9 +47,10 @@ public class UpdatePortRequestStateUseCase {
   }
 
   public static class UnAuthorizedUpdateRequestException extends RuntimeException {
-    private UnAuthorizedUpdateRequestException(String requestedBy, String recipient) {
-      super(String.format("[%s] cannot update a port request on behalf of [%s].", requestedBy,
-          recipient));
+    private UnAuthorizedUpdateRequestException(String requestedBy, String donor, Long requestId) {
+      super(
+          String.format("%s cannot change the state of port request [%s], only the donor [%s] can.",
+              donor, donor));
     }
   }
 }
