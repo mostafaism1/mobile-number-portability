@@ -4,6 +4,7 @@ import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
 import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.app.request.UpdatePortRequestStateCommand;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
+import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest.States;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class UpdatePortRequestStateUseCase {
         portRequest.transition(PortRequest.States.valueOf(command.transitionState().toUpperCase()));
     final PortRequest result = portRequestRepository.update(updatedPortRequest);
     if (command.transitionState().equalsIgnoreCase(PortRequest.States.ACCEPTED.toString()))
-      cancelPendingRequestsForNumber(portRequest);
+      cancelPendingRequestsForNumber(portRequest.mobileNumber().number());
     return PortRequestDTO.fromModel(result);
   }
 
@@ -35,10 +36,8 @@ public class UpdatePortRequestStateUseCase {
     return portRequest;
   }
 
-  private void cancelPendingRequestsForNumber(final PortRequest portRequest) {
-    portRequestRepository.getPendingByNumber(portRequest.mobileNumber().number()).stream()
-        .map(r -> r.transition(PortRequest.States.CANCELED))
-        .forEach(r -> portRequestRepository.update(r));
+  private void cancelPendingRequestsForNumber(String number) {
+    portRequestRepository.batchUpdateStateByMobileNumber(States.PENDING, States.CANCELED, number);
   }
 
   static class InvalidRequestIdException extends RuntimeException {
