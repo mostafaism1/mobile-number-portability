@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
@@ -21,14 +22,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PortRequestController {
 
+  private static final String AUTH_HEADER = "organization";
+
   private final CreatePortRequestUseCase createPortRequestUseCase;
   private final ListPortRequestsUseCase listPortRequestsUseCase;
   private final UpdatePortRequestStateUseCase updatePortRequestStatusUseCase;
 
   @PostMapping
-  public PortRequestDTO createPortRequest(
-      @RequestBody CreatePortRequestCommand createPortRequestCommand) {
-    return createPortRequestUseCase.create(createPortRequestCommand);
+  public PortRequestDTO createPortRequest(@RequestBody CreatePortRequestBody createPortRequestBody,
+      @RequestHeader(AUTH_HEADER) String organization) {
+    final CreatePortRequestCommand command =
+        new CreatePortRequestCommand(createPortRequestBody.number(), createPortRequestBody.donor(),
+            createPortRequestBody.recipient(), organization);
+    return createPortRequestUseCase.create(command);
   }
 
   @GetMapping
@@ -38,9 +44,13 @@ public class PortRequestController {
 
   @PatchMapping("/{id}")
   public PortRequestDTO updatePortRequest(@RequestBody UpdateRequestBody updateRequestBody,
-      @PathVariable("id") Long id) {
-    return updatePortRequestStatusUseCase
-        .update(new UpdatePortRequestStateCommand(id, updateRequestBody.state));
+      @RequestHeader(AUTH_HEADER) String organization, @PathVariable("id") Long id) {
+    final UpdatePortRequestStateCommand command =
+        new UpdatePortRequestStateCommand(id, updateRequestBody.state, organization);
+    return updatePortRequestStatusUseCase.update(command);
+  }
+
+  public record CreatePortRequestBody(String number, String donor, String recipient) {
   }
 
   private static record UpdateRequestBody(String state) {

@@ -12,6 +12,7 @@ public class UpdatePortRequestStateUseCase {
   private final PortRequestRepository portRequestRepository;
 
   public PortRequestDTO update(UpdatePortRequestStateCommand command) {
+    validateAuthorized(command);
     final PortRequest portRequest = mapUpdateCommandToModel(command);
     final PortRequest updatedPortRequest =
         portRequest.transition(PortRequest.States.valueOf(command.transitionState().toUpperCase()));
@@ -19,6 +20,13 @@ public class UpdatePortRequestStateUseCase {
     if (command.transitionState().equalsIgnoreCase(PortRequest.States.ACCEPTED.toString()))
       cancelPendingRequestsForNumber(portRequest);
     return PortRequestDTO.fromModel(result);
+  }
+
+  private void validateAuthorized(UpdatePortRequestStateCommand command) {
+    final String recipient = portRequestRepository.getById(command.id()).get().recipient().name();
+    final boolean isAuthorized = command.requestedBy().equalsIgnoreCase(recipient);
+    if (!isAuthorized)
+      throw new UnAuthorizedUpdateRequestException(command.requestedBy(), recipient);
   }
 
   private PortRequest mapUpdateCommandToModel(UpdatePortRequestStateCommand command) {
@@ -36,6 +44,13 @@ public class UpdatePortRequestStateUseCase {
   static class InvalidRequestIdException extends RuntimeException {
     private InvalidRequestIdException(Long id) {
       super(String.format("[%d] is not a valid Port Request ID.", id));
+    }
+  }
+
+  static class UnAuthorizedUpdateRequestException extends RuntimeException {
+    private UnAuthorizedUpdateRequestException(String requestedBy, String recipient) {
+      super(String.format("[%s] cannot update a port request on behalf of [%s].", requestedBy,
+          recipient));
     }
   }
 }

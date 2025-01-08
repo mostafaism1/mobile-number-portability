@@ -52,7 +52,7 @@ public class UpdatePortRequestStateUseCaseTest {
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
         PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
-    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "accepted");
+    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "accepted", "orange");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
         PortRequest.States.ACCEPTED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))
@@ -76,7 +76,7 @@ public class UpdatePortRequestStateUseCaseTest {
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
         PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
-    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "rejected");
+    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "rejected", "orange");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
         PortRequest.States.REJECTED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))
@@ -100,7 +100,7 @@ public class UpdatePortRequestStateUseCaseTest {
     portRequest = new PortRequest(0L, mobileNumber, donor, recipient, Instant.now(),
         PortRequest.States.PENDING);
     given(portRequestRepository.getById(0L)).willReturn(Optional.of(portRequest));
-    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "canceled");
+    updatePortRequestStateCommand = new UpdatePortRequestStateCommand(0L, "canceled", "orange");
     expectedResponse = new PortRequest(0L, mobileNumber, donor, recipient, portRequest.createdAt(),
         PortRequest.States.CANCELED);
     given(portRequestRepository.update(Mockito.any(PortRequest.class)))

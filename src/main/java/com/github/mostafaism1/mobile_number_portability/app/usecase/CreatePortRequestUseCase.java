@@ -18,10 +18,17 @@ public class CreatePortRequestUseCase {
   private final PortRequestRepository portRequestRepository;
 
   public PortRequestDTO create(CreatePortRequestCommand command) {
+    validateAuthroized(command);
     final PortRequest portRequest = mapCreateCommandToModel(command);
     validateRequest(portRequest);
     final PortRequest result = portRequestRepository.create(portRequest);
     return PortRequestDTO.fromModel(result);
+  }
+
+  private void validateAuthroized(CreatePortRequestCommand command) {
+    final boolean isAuthorized = command.requestedBy().equalsIgnoreCase(command.recipient());
+    if (!isAuthorized)
+      throw new UnAuthorizedCreateRequestException(command.requestedBy(), command.recipient());
   }
 
   private PortRequest mapCreateCommandToModel(CreatePortRequestCommand command) {
@@ -76,6 +83,13 @@ public class CreatePortRequestUseCase {
     private DuplicateRequestException(String number) {
       super(String.format(
           "Cannot create request for number [%s] because it has another pending request.", number));
+    }
+  }
+
+  static class UnAuthorizedCreateRequestException extends RuntimeException {
+    private UnAuthorizedCreateRequestException(String requestedBy, String recipient) {
+      super(String.format("[%s] cannot create a port request on behalf of [%s].", requestedBy,
+          recipient));
     }
   }
 

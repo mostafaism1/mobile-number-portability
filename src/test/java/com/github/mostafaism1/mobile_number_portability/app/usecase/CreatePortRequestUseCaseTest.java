@@ -53,7 +53,7 @@ public class CreatePortRequestUseCaseTest {
 
   @BeforeEach
   void setup() {
-    createPortRequestCommand = new CreatePortRequestCommand("01012345678", "vodafone", "orange");
+    createPortRequestCommand = new CreatePortRequestCommand("01012345678", "vodafone", "orange", "orange");
     donor = new Operator(0L, "vodafone");;
     recipient = new Operator(1L, "orange");
     mobileNumber = new MobileNumber(0L, "01012345678", donor);
@@ -191,7 +191,7 @@ public class CreatePortRequestUseCaseTest {
     given(operatorRepository.getOperatorByName("orange")).willReturn(Optional.of(recipient));
     given(mobileNumberRepository.getMobileNumberByNumber("01012345678"))
         .willReturn(Optional.of(mobileNumber));
-    createPortRequestCommand = new CreatePortRequestCommand("01012345678", "vodafone", "vodafone");
+    createPortRequestCommand = new CreatePortRequestCommand("01012345678", "vodafone", "vodafone", "vodafone");
 
     // When, then.
     thenThrownBy(() -> createPortRequestUseCase.create(createPortRequestCommand))
