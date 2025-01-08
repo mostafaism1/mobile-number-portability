@@ -19,7 +19,7 @@ fi
 echo "=============================="
 echo "Building Docker image..."
 echo "=============================="
-docker build -t mnp:0.0.1-SNAPSHOT .
+docker build -t mnp:1.0.0 .
 echo "Docker image built successfully."
 
 # Step 3: Start the application with Docker Compose

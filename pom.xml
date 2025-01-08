@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.mostafaism1</groupId>
 	<artifactId>mobile-number-portability</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>mobile-number-portability</name>
 	<description>Implements a Mobile Number Portability (MNP) service. Ref: https://www.tra.gov.eg/wp-content/uploads/2020/11/Number-Portability-User-Guide-Summary.pdf</description>
 	
