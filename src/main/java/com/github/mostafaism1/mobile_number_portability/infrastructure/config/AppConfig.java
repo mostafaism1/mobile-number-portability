@@ -2,9 +2,11 @@ package com.github.mostafaism1.mobile_number_portability.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import com.github.mostafaism1.mobile_number_portability.app.repository.MobileNumberRepository;
 import com.github.mostafaism1.mobile_number_portability.app.repository.OperatorRepository;
 import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
+import com.github.mostafaism1.mobile_number_portability.app.usecase.CancelTimedOutPortRequestsUseCase;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.ListPortRequestsUseCase;
 import com.github.mostafaism1.mobile_number_portability.app.usecase.UpdatePortRequestStateUseCase;
@@ -16,6 +18,7 @@ import com.github.mostafaism1.mobile_number_portability.infrastructure.persisten
 import com.github.mostafaism1.mobile_number_portability.infrastructure.persistence.repository.SpringDataPortRequestRepository;
 
 @Configuration
+@EnableScheduling
 public class AppConfig {
 
   @Bean
@@ -53,6 +56,12 @@ public class AppConfig {
   public UpdatePortRequestStateUseCase getUpdatePortRequestStateUseCase(
       PortRequestRepository portRequestRepository) {
     return new UpdatePortRequestStateUseCase(portRequestRepository);
+  }
+
+  @Bean
+  public CancelTimedOutPortRequestsUseCase getCancelTimedOutPortRequestsUseCase(
+      PortRequestRepository portRequestRepository) {
+    return new CancelTimedOutPortRequestsUseCase(portRequestRepository);
   }
 
 }
