@@ -47,4 +47,14 @@ public class JpaPortRequestRepository implements PortRequestRepository {
     return result.toModel();
   }
 
+  @Override
+  public void batchUpdateStateByMobileNumber(PortRequest.States matchingState,
+      PortRequest.States newState, String number) {
+    final PortRequestEntity.States matchingEntityState =
+        PortRequestEntity.States.fromModel(matchingState);
+    final PortRequestEntity.States newEntityState = PortRequestEntity.States.fromModel(newState);
+    springDataPortRequestRepository.batchUpdateStateByMobileNumber(matchingEntityState,
+        newEntityState, number);
+  }
+
 }

@@ -3,6 +3,7 @@ package com.github.mostafaism1.mobile_number_portability.app.repository;
 import java.util.List;
 import java.util.Optional;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
+import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest.States;
 
 public interface PortRequestRepository {
 
@@ -15,5 +16,7 @@ public interface PortRequestRepository {
   public List<PortRequest> getAll();
 
   public PortRequest update(PortRequest portRequest);
+
+  public void batchUpdateStateByMobileNumber(States matchingState, States newState, String number);
 
 }

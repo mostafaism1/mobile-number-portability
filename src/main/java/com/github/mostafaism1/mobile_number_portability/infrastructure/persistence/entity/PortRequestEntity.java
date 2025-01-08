@@ -50,6 +50,14 @@ public class PortRequestEntity {
 
   public static enum States {
     PENDING, CANCELED, REJECTED, ACCEPTED;
+
+    public PortRequest.States toModel() {
+      return PortRequest.States.valueOf(this.toString());
+    }
+
+    public static PortRequestEntity.States fromModel(PortRequest.States state) {
+      return PortRequestEntity.States.valueOf(state.toString());
+    }
   }
 
   @PrePersist
@@ -59,7 +67,7 @@ public class PortRequestEntity {
 
   public PortRequest toModel() {
     return new PortRequest(this.id, this.mobileNumber.toModel(), this.donor.toModel(),
-        this.recipient.toModel(), this.createdAt, PortRequest.States.valueOf(this.state.toString()));
+        this.recipient.toModel(), this.createdAt, this.state.toModel());
   }
 
   public static PortRequestEntity fromModel(PortRequest portRequest) {
