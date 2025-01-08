@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.IllegalRecipientException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.InvalidMobileNumberException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.InvalidOperatorException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.PortRequestConflictException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.CreatePortRequestUseCase.UnAuthorizedCreateRequestException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.UpdatePortRequestStateUseCase.InvalidRequestIdException;
-import com.github.mostafaism1.mobile_number_portability.app.usecase.UpdatePortRequestStateUseCase.UnAuthorizedUpdateRequestException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.IllegalRecipientException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.InvalidMobileNumberException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.InvalidOperatorException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.InvalidRequestIdException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.PortRequestConflictException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.UnAuthorizedCreateRequestException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.UnAuthorizedUpdateRequestException;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest.IllegalRequestStateTransitionException;
 
 @RestControllerAdvice

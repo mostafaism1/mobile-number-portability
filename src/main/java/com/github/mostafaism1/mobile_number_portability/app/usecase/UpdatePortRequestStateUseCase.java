@@ -1,6 +1,8 @@
 package com.github.mostafaism1.mobile_number_portability.app.usecase;
 
 import com.github.mostafaism1.mobile_number_portability.app.dto.PortRequestDTO;
+import com.github.mostafaism1.mobile_number_portability.app.exception.InvalidRequestIdException;
+import com.github.mostafaism1.mobile_number_portability.app.exception.UnAuthorizedUpdateRequestException;
 import com.github.mostafaism1.mobile_number_portability.app.repository.PortRequestRepository;
 import com.github.mostafaism1.mobile_number_portability.app.request.UpdatePortRequestStateCommand;
 import com.github.mostafaism1.mobile_number_portability.domain.model.PortRequest;
@@ -38,19 +40,5 @@ public class UpdatePortRequestStateUseCase {
 
   private void cancelPendingRequestsForNumber(String number) {
     portRequestRepository.batchUpdateStateByMobileNumber(States.PENDING, States.CANCELED, number);
-  }
-
-  public static class InvalidRequestIdException extends RuntimeException {
-    private InvalidRequestIdException(Long id) {
-      super(String.format("[%d] is not a valid Port Request ID.", id));
-    }
-  }
-
-  public static class UnAuthorizedUpdateRequestException extends RuntimeException {
-    private UnAuthorizedUpdateRequestException(String requestedBy, String donor, Long requestId) {
-      super(
-          String.format("%s cannot change the state of port request [%s], only the donor [%s] can.",
-              donor, donor));
-    }
   }
 }
