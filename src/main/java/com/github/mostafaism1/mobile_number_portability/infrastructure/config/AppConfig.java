@@ -47,9 +47,9 @@ public class AppConfig {
   }
 
   @Bean
-  public ListPortRequestsUseCase getListPortRequestsUseCase(
+  public ListPortRequestsUseCase getListPortRequestsUseCase(OperatorRepository operatorRepository,
       PortRequestRepository portRequestRepository) {
-    return new ListPortRequestsUseCase(portRequestRepository);
+    return new ListPortRequestsUseCase(operatorRepository, portRequestRepository);
   }
 
   @Bean

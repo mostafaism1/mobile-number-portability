@@ -42,8 +42,8 @@ public class PortRequestController {
 
   @GetMapping
   @ResponseStatus(code = HttpStatus.OK)
-  public List<PortRequestDTO> getPortRequests() {
-    return listPortRequestsUseCase.list();
+  public List<PortRequestDTO> getPortRequests(@RequestHeader(AUTH_HEADER) String organization) {
+    return listPortRequestsUseCase.list(organization);
   }
 
   @PatchMapping("/{id}")
